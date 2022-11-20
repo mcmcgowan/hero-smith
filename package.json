@@ -2,13 +2,13 @@
   "name": "hero-smith",
   "version": "1.0.0",
   "description": "A D&amp;D character creator",
-  "private": true,
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
-    "watch": "webpack --watch",
-    "start": "webpack server --open",
-    "server": "node server.js"
+    "build": "webpack --config ./webpack.config.js",
+    "start": "node ./server/server.js",
+    "dev:hot": "NODE_ENV=development nodemon ./server/server.js & webpack-dev-server --open --hot",
+    "docker-dev:hot": "docker-compose -f docker-compose-dev-hot.yml up",
+    "test": "NODE_ENV=test jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -22,10 +22,19 @@
   },
   "homepage": "https://github.com/mcmcgowan/hero-smith#readme",
   "devDependencies": {
+    "@babel/cli": "^7.19.3",
     "@babel/core": "^7.20.2",
+    "@babel/eslint-parser": "^7.19.1",
+    "@babel/plugin-transform-runtime": "^7.19.6",
     "@babel/preset-env": "^7.20.2",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/runtime": "^7.20.1",
     "babel-loader": "^9.1.0",
     "css-loader": "^6.7.2",
+    "eslint": "^8.28.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-jest": "^27.1.5",
     "express": "^4.18.2",
     "html-webpack-plugin": "^5.5.0",
     "sass": "^1.56.1",
@@ -37,6 +46,9 @@
     "webpack-dev-server": "^4.11.1"
   },
   "dependencies": {
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "path": "^0.12.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }
