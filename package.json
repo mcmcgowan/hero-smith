@@ -46,8 +46,10 @@
     "webpack-dev-server": "^4.11.1"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/material": "^5.10.14",
     "@reduxjs/toolkit": "^1.9.0",
-    "lodash": "^4.17.21",
     "path": "^0.12.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
