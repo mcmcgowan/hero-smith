@@ -1,25 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.js"
-import "./styles/main.scss"
+import App from "./App.jsx"
+import "./styles/main.scss";
+import store from './store.js'
+import { Provider } from "react-redux";
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />      
+    </Provider>
   </React.StrictMode>
-)
-
-// function component() {
-//     const element = document.createElement('div');
-
-//     element.innerHTML = 'Just a change';
-//     const icon = new Image()
-//     icon.src = jsIcon;
-
-//     element.appendChild(icon)
-//     return element;
-//   }
-  
-//   document.body.appendChild(component());
+);
