@@ -29,10 +29,10 @@ const BasicInfo = () => {
                 margin="normal"
                 required
                 fullWidth
-                id="playerName"
-                label="playerName"
-                name="playerName"
-                autoComplete="playerName"
+                id="background"
+                label="background"
+                name="background"
+                autoComplete="background"
                 autoFocus
             />
             <TextField
