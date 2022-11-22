@@ -49,10 +49,10 @@ const BasicInfo = () => {
                 margin="normal"
                 required
                 fullWidth
-                id="playerName"
-                label="playerName"
-                name="playerName"
-                autoComplete="playerName"
+                id="level"
+                label="level"
+                name="level"
+                autoComplete="level"
                 autoFocus
             />
         </Container>
