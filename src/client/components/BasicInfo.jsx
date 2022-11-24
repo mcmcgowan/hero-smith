@@ -37,13 +37,23 @@ const BasicInfo = () => {
                     classes(name: "${className}") {
                       name
                       hit_die
+                      subclasses {
+                          desc
+                          subclass_flavor
+                      }
                     }
                   }
                 `,
             })
             .then((result) => {
-                console.log(result.data.classes[0])
-                setClassInfo(result.data.classes[0])
+                const res = result.data.classes[0]
+                console.log(res)
+                setClassInfo({
+                    name: res.name,
+                    hit_die: res.hit_die,
+                    subClass: res.subclasses[0].subclass_flavor,
+                    subDesc: res.subclasses[0].desc
+                })
                 setClassLoading(false)
             });      
     }
@@ -133,9 +143,12 @@ const BasicInfo = () => {
                         borderColor: 'black'
                         }}
                     >
-                        {(classLoading) ? <Typography>Waiting on class info from API...</Typography> : 
+                        {(charClass == '') ? <Typography>Class Info from DnD API</Typography> : 
+                        (classLoading) ? <Typography>Waiting on class info from API...</Typography> : 
                         <>
                             <Typography>Selected Class: {classInfo.name}</Typography>
+                            <Typography>Subclass: {classInfo.subClass}</Typography>
+                            <Typography>Description: {classInfo.subDesc}</Typography>
                             <Typography>Hit Dice: {classInfo.hit_die}</Typography>
                         </>}
                     </Container>                      
