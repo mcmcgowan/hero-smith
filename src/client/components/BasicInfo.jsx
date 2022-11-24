@@ -1,12 +1,55 @@
 import React, { useState } from 'react';
 import {TextField, Container, Typography, Box, Button, Select, MenuItem, InputLabel, FormControl} from '@mui/material';
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+import { border } from '@mui/system';
+
+const classes = ['Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk', 'Paladin', 'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard'];
+const races =[]
 
 const BasicInfo = () => {
     const [charClass, setCharClass] = useState('')
+    const [classInfo, setClassInfo] = useState({})
+    const [classLoading, setClassLoading] = useState(false)
+
+    const client = new ApolloClient({
+        uri: 'https://www.dnd5eapi.co/graphql',
+        cache: new InMemoryCache(),
+    });
+
+    const classMenu = []
+    classes.map(ele =>{
+        classMenu.push(<MenuItem key={ele} value={ele}>{ele}</MenuItem>)
+    })
+    
     const handleClassChange = (event) => {
-        console.log(event.target.value)
-        setCharClass(event.target.value)
+        const className = event.target.value
+        console.log(className)
+        setClassLoading(true)
+        handleClassQuery(className)
+        setCharClass(className)
     }
+    const handleClassQuery = (className) => {
+        console.log(className)
+        client
+            .query({
+                query: gql`
+                query GetClasses {
+                    classes(name: "${className}") {
+                      name
+                      hit_die
+                    }
+                  }
+                `,
+            })
+            .then((result) => {
+                console.log(result.data.classes[0])
+                setClassInfo(result.data.classes[0])
+                setClassLoading(false)
+            });      
+    }
+
+
+
     return(
         <Container sx={{
             display: 'flex',
@@ -16,9 +59,17 @@ const BasicInfo = () => {
             width: '400px',
             borderRadius: '5px',
         }}>
-            <Box component="form">
+            <Box 
+                component="form"
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-evenly',
+                    padding: '1em',
+                    gap: '1em'
+                }}
+            >
                 <TextField
-                    margin="normal"
                     required
                     fullWidth
                     id="playerName"
@@ -28,7 +79,6 @@ const BasicInfo = () => {
                     autoFocus
                 />
                 <TextField
-                    margin="normal"
                     required
                     fullWidth
                     id="characterName"
@@ -38,7 +88,6 @@ const BasicInfo = () => {
                     autoFocus
                 />
                 <TextField
-                    margin="normal"
                     required
                     fullWidth
                     id="background"
@@ -48,7 +97,6 @@ const BasicInfo = () => {
                     autoFocus
                 />
                 <TextField
-                    margin="normal"
                     required
                     fullWidth
                     id="alignment"
@@ -58,7 +106,6 @@ const BasicInfo = () => {
                     autoFocus
                 />
                 <TextField
-                    margin="normal"
                     required
                     fullWidth
                     id='level'
@@ -67,28 +114,33 @@ const BasicInfo = () => {
                     autoComplete='level'
                     autoFocus
                 />
-                <InputLabel id='charClassLabel'>Choose A Class:</InputLabel>
-                <Select
-                    fullWidth
-                    labelId='charClassLabel'
-                    id='charClass'
-                    value={charClass}
-                    label='charClass'
-                    onChange={handleClassChange}
-                >
-                    <MenuItem value='barbarian'>Barbarian</MenuItem>
-                    <MenuItem value='bard'>Bard</MenuItem>
-                    <MenuItem value='cleric'>Cleric</MenuItem>
-                    <MenuItem value='druid'>Druid</MenuItem>
-                    <MenuItem value='fighter'>Fighter</MenuItem>
-                    <MenuItem value='monk'>Monk</MenuItem>
-                    <MenuItem value='paladin'>Paladin</MenuItem>
-                    <MenuItem value='ranger'>Ranger</MenuItem>
-                    <MenuItem value='rogue'>Rogue</MenuItem>
-                    <MenuItem value='sorcerer'>Sorcerer</MenuItem>
-                    <MenuItem value='warlock'>Warlock</MenuItem>
-                    <MenuItem value='wizard'>Wizard</MenuItem>
-                </Select>                    
+                <FormControl>
+                    <InputLabel  required id='class-select-label'>Class</InputLabel>
+                    <Select
+                        fullWidth
+                        labelId='class-select-label'
+                        id='charClass'
+                        value={charClass}
+                        label='charClass'
+                        onChange={handleClassChange}
+                    >
+                        {classMenu}
+                    </Select>      
+                    <Container sx={{
+                        marginTop: '1em',
+                        border: 'solid',
+                        borderWidth: 1,
+                        borderColor: 'black'
+                        }}
+                    >
+                        {(classLoading) ? <Typography>Waiting on class info from API...</Typography> : 
+                        <>
+                            <Typography>Selected Class: {classInfo.name}</Typography>
+                            <Typography>Hit Dice: {classInfo.hit_die}</Typography>
+                        </>}
+                    </Container>                      
+                </FormControl>
+          
             </Box>
 
         </Container>
